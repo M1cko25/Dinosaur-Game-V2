@@ -12,14 +12,16 @@
     width: 80%;
     height: 70%;
     transform: translate(-50%, -50%);
-    border: 1px solid;
-    transition: all 2s linear;
+    border: 0px solid;
+    background-color: skyblue;
+    transition: background-color 2s linear;
     overflow: hidden;
 }
 #canvas1 {
     position: absolute;
     width: 100%;
     height: 100%;
+    display: flex;
 }
 #canvas2 {
     position: absolute;
@@ -88,22 +90,18 @@
 
 @media (min-width: 481px) and (max-width: 768px){
     .container {
-    width: 100%;
-    height: 40%;
+        transform: scale(0.4);
     }
     #restartBtn {
-        width: 100%;
-        height: 40%;
+        transform: scale(0.4);
     }
 }
 @media (min-width: 0px) and (max-width: 480px){
     .container {
-    width: 80%;
-    height: 70%;
+    transform: scale(0.4);
     }
     #restartBtn {
-        width: 80%;
-        height: 70%;
+        transform: scale(0.4);
     }
 }
 @keyframes jumping {
