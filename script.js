@@ -162,20 +162,7 @@ function animateBg() {
     }
     requestAnimationFrame(animateBg);
 }
-/*
-function cycler() {
-    if (isShow == true) {
-        isShow = false
-        console.log(isShow)
-    } else {
-        isShow = true;
-        console.log(isShow)
-    }
-}
-setInterval(()=> {
-    cycler();
-}, 3000)
-*/
+
 const dinoCanvas = document.getElementById('canvas2');
 const dinoCtx = dinoCanvas.getContext('2d');
 const DINO_WIDTH = dinoCanvas.width = 100;
