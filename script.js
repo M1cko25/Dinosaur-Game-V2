@@ -243,8 +243,7 @@ function dinoJump() {
         if (collided == false) {
         dinoRunAnimation();
         dinoCanvas.classList.remove('jump');
-        }
-        }, 1000)
+        }}, 1000)
     }
 }
 
