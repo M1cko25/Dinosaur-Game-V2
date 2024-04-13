@@ -11,6 +11,83 @@ let currScore = 0;
 let isShow = false;
 let isNight = false;
 
+const dinoCanvas = document.getElementById('canvas2');
+const dinoCtx = dinoCanvas.getContext('2d');
+const DINO_WIDTH = dinoCanvas.width = 100;
+const DINO_HEIGHT = dinoCanvas.height = 100;
+let dinoWidth = 100;
+let dinoHeight = 100;
+let gameFrame = 0;
+let staggerFrames;
+let playerState = 'idle';
+
+const bgLayer1 = new Image();
+bgLayer1.src = './images/DesertPath.png';
+const pyramid = new Image();
+pyramid.src = './images/Pyramid.png';
+const cloud1 = new Image();
+cloud1.src = './images/cloud1.png';
+const cloud2 = new Image();
+cloud2.src = './images/cloud2.png';
+const cloud3 = new Image();
+cloud3.src = './images/cloud3.png';
+const cloud4 = new Image();
+cloud4.src = './images/cloud4.png';
+const moon = new Image();
+moon.src = './images/Moon.png';
+const dino = new Image();
+dino.src = './images/DinoSprite1.png';
+
+const cactus1 = new Image();
+cactus1.src = './images/Cactus1.png';
+const cactus2 = new Image();
+cactus2.src = './images/Cactus2.png';
+cactus2.width = '203px';
+const cactus3 = new Image();
+cactus3.src = './images/Cactus3.png';
+let cactusX = CANVAS_WIDTH + 2000;
+let cactusX2 = CANVAS_WIDTH + 2000;
+let cactusRand = Math.floor(Math.random() * 6) + 10;
+let cactusRandInt = Math.floor(Math.random() * 2) + 12;
+let cactusRandIndex = Math.floor(Math.random() * 3) ;
+let dblCactRand = Math.round(Math.random() * 2) + 1;
+
+let cloudHeight1 = Math.floor(Math.random() * 10);
+let cloudHeight2 = Math.floor(Math.random() * 10);
+let cloudHeight3 = Math.floor(Math.random() * 10);
+let cloudHeight4 = Math.floor(Math.random() * 10);
+let moonDist = Math.floor(Math.random() * 10) + 1;
+let x1 = 0;
+let x2 = CANVAS_WIDTH;
+let x3 = CANVAS_WIDTH;
+let x4 = CANVAS_WIDTH + (cloudHeight2 * 50);
+let x5 = CANVAS_WIDTH + (cloudHeight3 * 70);
+let x6 = CANVAS_WIDTH + (cloudHeight4 * 90); 
+let x7 = CANVAS_WIDTH + (moonDist * 10);
+
+const spriteAnimations = [];
+const animationState = [
+    {name:'idle',frames: 1},
+    {name:'run',frames: 9},
+    {name:'jump',frames: 13},
+    {name:'died',frames: 6},
+    {name:'crouch',frames: 3}
+];
+animationState.forEach((state, index) => {
+    let frames = {
+        loc: [],
+    }
+    for(let j = 0;j < state.frames; j++) {
+        let positionX = j * dinoWidth;
+        let positionY = index * dinoHeight;
+        frames.loc.push({x: positionX, y: positionY});
+    }
+    spriteAnimations[state.name] = frames;
+})
+
+let dinoJumping = false;
+let dinoRunning = false;
+
 window.addEventListener('resize', ()=> {
     w = canvas.getBoundingClientRect().width;
     h = canvas.getBoundingClientRect().height;
@@ -26,9 +103,9 @@ function collisionDetection() {
         bottom: dinoCanvas.getBoundingClientRect().bottom - canvas.getBoundingClientRect().top 
     };
     const cactusRect = {
-        left: cactusX + 430, 
+        left: cactusX + 30, 
         top: CANVAS_HEIGHT - 160,
-        right: cactusX + 490, 
+        right: cactusX + 90, 
         bottom: CANVAS_HEIGHT - 60
     };
     const cactusRect2 = {
@@ -69,11 +146,11 @@ function gameOverActions() {
     gameStart = false;
     dinoRunning = false;
     diedSound.play();
+    dinoDiedAnimation();
     gameOverTxt.style.visibility = 'visible';
     restBtn.style.visibility = 'visible';
     setHighScore(currScore);
     dinoCanvas.style.animationPlayState = 'paused';
-    dinoDiedAnimation();
 }
 
 const scoreSound = new Audio('./sounds/score100Sound.mp3');

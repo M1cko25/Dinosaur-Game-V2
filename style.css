@@ -5,12 +5,14 @@
     padding: 0;
     box-sizing: border-box;
 }
-.container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 80%;
-    height: 70%;
+@media (min-width: 768px) and (max-width: 1920px) {
+    
+    .container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 80%;
+        height: 70%;
     transform: translate(-50%, -50%);
     border: 0px solid;
     background-color: skyblue;
@@ -88,22 +90,6 @@
     animation: cactusmove 6s linear forwards infinite;
 }
 
-@media (min-width: 481px) and (max-width: 768px){
-    .container {
-        transform: scale(0.4);
-    }
-    #restartBtn {
-        transform: scale(0.4);
-    }
-}
-@media (min-width: 0px) and (max-width: 480px){
-    .container {
-    transform: scale(0.4);
-    }
-    #restartBtn {
-        transform: scale(0.4);
-    }
-}
 @keyframes jumping {
     0%, 100% {
         bottom: 55px;
@@ -119,4 +105,5 @@
     33.33%, 100% {
         right: 100%;
     }
+}
 }
