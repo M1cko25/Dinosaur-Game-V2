@@ -55,16 +55,19 @@ function dinoJump() {
 function dinoDiedAnimation() {
     if (collided == true)
     {
-        playerState = 'died';
+    playerState = 'died';
     staggerFrames = 10;
     dinoCtx.clearRect(0, 0, DINO_WIDTH, DINO_HEIGHT);
     let position = Math.floor(gameFrame/staggerFrames) % spriteAnimations[playerState].loc.length;
     frameX = dinoWidth * position;
     frameY = spriteAnimations[playerState].loc[position].y;
    dinoCtx.drawImage(dino, frameX, frameY, dinoWidth, dinoHeight, 0, 0, dinoWidth, dinoHeight);
-   if (frameX == 500) {
-       frameX = 500;
-       return;
+   
+    
+    if (frameX == 500) {
+        frameX = 400;
+        return;
+        console.log("collided")
     }
     gameFrame++;
     requestAnimationFrame(dinoDiedAnimation);

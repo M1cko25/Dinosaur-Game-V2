@@ -45,8 +45,8 @@ cactus2.src = './images/Cactus2.png';
 cactus2.width = '203px';
 const cactus3 = new Image();
 cactus3.src = './images/Cactus3.png';
-let cactusX = CANVAS_WIDTH + 2000;
-let cactusX2 = CANVAS_WIDTH + 2000;
+let cactusX = CANVAS_WIDTH + 3000;
+let cactusX2 = CANVAS_WIDTH + 3000;
 let cactusRand = Math.floor(Math.random() * 6) + 10;
 let cactusRandInt = Math.floor(Math.random() * 2) + 12;
 let cactusRandIndex = Math.floor(Math.random() * 3) ;
@@ -147,6 +147,7 @@ function gameOverActions() {
     dinoRunning = false;
     diedSound.play();
     dinoDiedAnimation();
+    dinoDiedAnimation();
     gameOverTxt.style.visibility = 'visible';
     restBtn.style.visibility = 'visible';
     setHighScore(currScore);
@@ -161,7 +162,7 @@ const gameOverTxt = document.getElementById('gameOver');
 const container = document.querySelector('.container');
 container.style.backgroundColor = "skyblue";
 function scoreUpdate() {
-    if (collided == false) {
+    if (collided == false && gameStart == true) {
         currScore++;
         if (currScore < 10) {
             score.textContent = "000" + currScore;
@@ -219,7 +220,6 @@ setInterval(()=> {
         dinoCtx.drawImage(dino, 0, 0, dinoWidth, dinoHeight,0, 0, dinoWidth, dinoHeight);
     }
 },10);
-
 canvas.addEventListener('click', ()=> {
     if (gameStart == false && collided == false) {
         gameStart = true;
@@ -228,6 +228,11 @@ canvas.addEventListener('click', ()=> {
         dinoRunning = true;
         animateBg();
         dinoJump(); 
+        // setInterval(()=> {
+        //     if (gameStart == true && collided == false) {
+        //         collisionDetection();
+        //     }
+        // }, 100)
         setInterval(scoreUpdate, 100);
         setInterval(()=> {
             gameSpeed++;
@@ -244,6 +249,11 @@ document.addEventListener('keydown', function(e) {
             dinoRunning = true;
             animateBg();
             dinoJump(); 
+            // setInterval(()=> {
+            //     if (gameStart == true && collided == false) {
+            //         collisionDetection();
+            //     }
+            // }, 100)
             setInterval(scoreUpdate, 100);
             setInterval(()=> {
                 gameSpeed++;
@@ -262,7 +272,33 @@ document.addEventListener('keydown', (e)=> {
 });
 
 window.addEventListener('beforeunload', ()=> {
-    if (localStorage.getItem('curHighScore') != gameHighScore && localStorage.getItem('curHighScore') != currScore && localStorage.getItem('curHighScore') > currScore) {
-        localStorage.setItem('curHighScore', 0);
+    if (localStorage.getItem('curHighScore') != gameHighScore) {
+        if (localStorage.getItem('curHighScore') != currScore && localStorage.getItem('curHighScore') < currScore) {
+            localStorage.setItem('curHighScore', 0);
+        }
+    }
+}) 
+
+document.addEventListener('visibilitychange', ()=> {
+    if (document.visibilityState === 'hidden') {
+        if (gameStart == true && dinoRunning == true) {
+            gameStart = false;
+            dinoRunning = false;
+            dinoCanvas.style.animationPlayState = 'paused';
+        }
+    } else if (document.visibilityState === 'visible') {
+        if (gameStart == false && dinoRunning == false) {
+            gameStart = true;
+            dinoRunning = true;
+            dinoCanvas.style.animationPlayState = 'running';
+        }
     }
 })
+if (window.matchMedia("(max-width: 1000px)").matches) {
+    dinoWidth = 100;
+    dinoHeight = 100;
+    DINO_WIDTH = 100;
+    DINO_HEIGHT = 100;
+} else {
+    console.log("other screen detected");
+}

@@ -1,5 +1,7 @@
 
 function animateBg() {
+    if (gameStart == true)
+    {
     ctx.clearRect(0,0, CANVAS_WIDTH, CANVAS_HEIGHT);
     if (isNight == true) {
         ctx.drawImage(moon, x7, CANVAS_HEIGHT - CANVAS_HEIGHT, 150, 150);
@@ -152,4 +154,5 @@ function animateBg() {
         collisionDetection();
     }
     requestAnimationFrame(animateBg);
+}
 }
