@@ -501,8 +501,16 @@ canvas.addEventListener('click', ()=> {
         dinoJump(); 
         setInterval(scoreUpdate, 100);
         setInterval(()=> {
-            gameSpeed++;
-        },10000);
+            if (window.matchMedia("(min-width: 320px) and (max-width: 900px").matches) {
+                if (gameSpeed <= 10) {
+                    gameSpeed++;
+                }
+            } else {
+                if (gameSpeed <= 27) {
+                    gameSpeed++;
+                }
+            }
+        },25000);
     }
     else if (collided == false) {dinoJump();}
 });
@@ -527,7 +535,7 @@ document.addEventListener('keydown', function(e) {
                         gameSpeed++;
                     }
                 }
-            },10000);
+            },25000);
         }
         else if (collided == false && spacePressed == false) {
             dinoJump();
