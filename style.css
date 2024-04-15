@@ -111,7 +111,7 @@ cursor: pointer;
 }
 @media (min-width: 320px) and (max-width: 900px) {
 .container {
-    width: 100%;
+    width: 400px;
     height: 170px;
     overflow: hidden;
 }
