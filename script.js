@@ -369,7 +369,7 @@ function collisionDetection() {
             };
         }
     }
-    
+    /*
      // uncomment this to see hitbox
     ctx.strokeStyle = "red";
     ctx.lineWidth = 2;
@@ -380,7 +380,7 @@ function collisionDetection() {
     ctx.strokeRect(cactusRect2.left, cactusRect2.top, cactusRect2.right - cactusRect2.left, cactusRect2.bottom - cactusRect2.top);
     ctx.strokeStyle = "yellow";
     ctx.strokeRect(cactusRect3.left, cactusRect3.top, cactusRect3.right - cactusRect3.left, cactusRect3.bottom - cactusRect3.top);
-    
+    */
 
     if (!(dinoRect.right < cactusRect.left ||
         dinoRect.left > cactusRect.right ||
