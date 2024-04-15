@@ -8,13 +8,12 @@ let gameSpeed = 20;
 let gameStart = false;
 let collided = false;
 let currScore = 0;
-let isShow = false;
 let isNight = false;
 
 const dinoCanvas = document.getElementById('canvas2');
 const dinoCtx = dinoCanvas.getContext('2d');
-const DINO_WIDTH = dinoCanvas.width = 100;
-const DINO_HEIGHT = dinoCanvas.height = 100;
+let DINO_WIDTH = dinoCanvas.width = 100;
+let DINO_HEIGHT = dinoCanvas.height = 100;
 let dinoWidth = 100;
 let dinoHeight = 100;
 let gameFrame = 0;
@@ -22,35 +21,59 @@ let staggerFrames;
 let playerState = 'idle';
 
 const bgLayer1 = new Image();
-bgLayer1.src = './images/DesertPath.png';
 const pyramid = new Image();
-pyramid.src = './images/Pyramid.png';
 const cloud1 = new Image();
-cloud1.src = './images/cloud1.png';
 const cloud2 = new Image();
-cloud2.src = './images/cloud2.png';
 const cloud3 = new Image();
-cloud3.src = './images/cloud3.png';
 const cloud4 = new Image();
-cloud4.src = './images/cloud4.png';
+const cactus1 = new Image();
+const cactus2 = new Image();
+const cactus3 = new Image();
 const moon = new Image();
+if (window.matchMedia("(min-width: 320px) and (max-width: 900px").matches) {
+bgLayer1.src = './images/DesertPathM.png';
+pyramid.src = './images/PyramidM.png';
+cloud1.src = './images/cloud1M.png';
+cloud2.src = './images/cloud2M.png';
+cloud3.src = './images/cloud3M.png';
+cloud4.src = './images/cloud4M.png';
+moon.src = './images/MoonM.png';
+cactus1.src = './images/Cactus1M.png';
+cactus2.src = './images/Cactus2M.png';
+cactus3.src = './images/Cactus3M.png';
+} else {
+bgLayer1.src = './images/DesertPath.png';
+pyramid.src = './images/Pyramid.png';
+cloud1.src = './images/cloud1.png';
+cloud2.src = './images/cloud2.png';
+cloud3.src = './images/cloud3.png';
+cloud4.src = './images/cloud4.png';
 moon.src = './images/Moon.png';
+cactus1.src = './images/Cactus1.png';
+cactus2.src = './images/Cactus2.png';
+cactus3.src = './images/Cactus3.png';
+}
 const dino = new Image();
 dino.src = './images/DinoSprite1.png';
 
-const cactus1 = new Image();
-cactus1.src = './images/Cactus1.png';
-const cactus2 = new Image();
-cactus2.src = './images/Cactus2.png';
-cactus2.width = '203px';
-const cactus3 = new Image();
-cactus3.src = './images/Cactus3.png';
 let cactusX = CANVAS_WIDTH + 3000;
 let cactusX2 = CANVAS_WIDTH + 3000;
-let cactusRand = Math.floor(Math.random() * 6) + 10;
-let cactusRandInt = Math.floor(Math.random() * 2) + 12;
+let cactusX3 = CANVAS_WIDTH + 3000;
+let cactusRandInt = Math.floor(Math.random() * 2) + 8;
+let cactusRandInt2 = Math.floor(Math.random() * 2) + 18;
+if (window.matchMedia("(min-width: 320px) and (max-width: 900px").matches) {
+    cactusX = CANVAS_WIDTH + 1000;
+    cactusX2 = CANVAS_WIDTH + 1000;
+    cactusX3 = CANVAS_WIDTH + 1000;
+    cactusRandInt = Math.floor(Math.random() * 2) + 6;
+    cactusRandInt2 = Math.floor(Math.random() * 2) + 16;
+}
+
+
 let cactusRandIndex = Math.floor(Math.random() * 3) ;
 let dblCactRand = Math.round(Math.random() * 2) + 1;
+
+let birdX = CANVAS_WIDTH + 400;
 
 let cloudHeight1 = Math.floor(Math.random() * 10);
 let cloudHeight2 = Math.floor(Math.random() * 10);
@@ -87,6 +110,7 @@ animationState.forEach((state, index) => {
 
 let dinoJumping = false;
 let dinoRunning = false;
+let dinoCrouching = false;
 
 window.addEventListener('resize', ()=> {
     w = canvas.getBoundingClientRect().width;
@@ -96,35 +120,268 @@ window.addEventListener('resize', ()=> {
 })
 
 function collisionDetection() {
-    const dinoRect = {
-        left: dinoCanvas.getBoundingClientRect().left - canvas.getBoundingClientRect().left ,
+    let dinoRect = {
+        left: dinoCanvas.getBoundingClientRect().left - canvas.getBoundingClientRect().left + 25,
         top: dinoCanvas.getBoundingClientRect().top - canvas.getBoundingClientRect().top ,
         right: dinoCanvas.getBoundingClientRect().right - canvas.getBoundingClientRect().left,
         bottom: dinoCanvas.getBoundingClientRect().bottom - canvas.getBoundingClientRect().top 
     };
-    const cactusRect = {
-        left: cactusX + 30, 
-        top: CANVAS_HEIGHT - 160,
-        right: cactusX + 90, 
-        bottom: CANVAS_HEIGHT - 60
+    if (window.matchMedia("(min-width: 320px) and (max-width: 700px").matches) {
+        dinoRect = {
+            left: dinoCanvas.getBoundingClientRect().left - canvas.getBoundingClientRect().left + 15,
+            top: dinoCanvas.getBoundingClientRect().top - canvas.getBoundingClientRect().top ,
+            right: dinoCanvas.getBoundingClientRect().right - canvas.getBoundingClientRect().left,
+            bottom: dinoCanvas.getBoundingClientRect().bottom - canvas.getBoundingClientRect().top 
+        };
+        if (dinoCrouching == true) {
+            dinoRect = {
+                left: dinoCanvas.getBoundingClientRect().left - canvas.getBoundingClientRect().left + 15,
+                top: (dinoCanvas.getBoundingClientRect().top - canvas.getBoundingClientRect().top) + 25,
+                right: dinoCanvas.getBoundingClientRect().right - canvas.getBoundingClientRect().left,
+                bottom: dinoCanvas.getBoundingClientRect().bottom - canvas.getBoundingClientRect().top 
+            };
+        }
+    } else {
+        dinoRect = {
+            left: dinoCanvas.getBoundingClientRect().left - canvas.getBoundingClientRect().left + 25,
+            top: dinoCanvas.getBoundingClientRect().top - canvas.getBoundingClientRect().top ,
+            right: dinoCanvas.getBoundingClientRect().right - canvas.getBoundingClientRect().left,
+            bottom: dinoCanvas.getBoundingClientRect().bottom - canvas.getBoundingClientRect().top 
+        };
+        if (dinoCrouching == true) {
+            dinoRect = {
+                left: dinoCanvas.getBoundingClientRect().left - canvas.getBoundingClientRect().left + 25,
+                top: (dinoCanvas.getBoundingClientRect().top - canvas.getBoundingClientRect().top) + 25,
+                right: dinoCanvas.getBoundingClientRect().right - canvas.getBoundingClientRect().left,
+                bottom: dinoCanvas.getBoundingClientRect().bottom - canvas.getBoundingClientRect().top 
+            };
+        }
+    }
+
+    let cactusRect = {
+        left: 0, 
+        top: 0,
+        right: 0, 
+        bottom: 0
     };
-    const cactusRect2 = {
-        left: cactusX2 + 30 + (cactusRandInt * 100), 
-        top: CANVAS_HEIGHT - 160,
-        right: cactusX2 + 90  + (cactusRandInt * 100), 
-        bottom: CANVAS_HEIGHT - 60
+    let cactusRect2 = {
+        left: 0, 
+        top: 0,
+        right: 0, 
+        bottom: 0
     };
-    /*
+    let cactusRect3 = {
+        left: 0, 
+        top: 0,
+        right: 0, 
+        bottom: 0
+    };
+    if (window.matchMedia("(min-width: 320px) and (max-width: 900px").matches) {
+        if (cactusRandIndex == 0) {
+            cactusRect = {
+                left: cactusX + 20, 
+                top: CANVAS_HEIGHT - 58,
+                right: cactusX + 50, 
+                bottom: CANVAS_HEIGHT - 10
+            };
+            if (dblCactRand == 1) {
+                cactusRect2 = {
+                    left: cactusX2 + 23 + (cactusRandInt * 100), 
+                    top: CANVAS_HEIGHT - 67,
+                    right: cactusX2 + 60  + (cactusRandInt * 100), 
+                    bottom: CANVAS_HEIGHT - 10
+                };
+            } else if (dblCactRand == 2) {
+                cactusRect2 = {
+                    left: cactusX2 + 20 + (cactusRandInt * 100), 
+                    top: CANVAS_HEIGHT - 65,
+                    right: cactusX2 + 50  + (cactusRandInt * 100), 
+                    bottom: CANVAS_HEIGHT - 10
+                };
+            } else {
+                cactusRect2 = {
+                    left: cactusX2 + 20 + (cactusRandInt * 100), 
+                    top: CANVAS_HEIGHT - 65,
+                    right: cactusX2 + 50  + (cactusRandInt * 100), 
+                    bottom: CANVAS_HEIGHT - 10
+                };
+                cactusRect3 = {
+                    left: cactusX3 + 23 + (cactusRandInt2 * 100), 
+                    top: CANVAS_HEIGHT - 67,
+                    right: cactusX3 + 60  + (cactusRandInt2 * 100), 
+                    bottom: CANVAS_HEIGHT - 10
+                };
+            }
+        } 
+        else if (cactusRandIndex == 1) {
+            cactusRect = {
+                left: cactusX + 23, 
+                top: CANVAS_HEIGHT - 57,
+                right: cactusX + 60, 
+                bottom: CANVAS_HEIGHT - 10
+            };
+            if (dblCactRand == 1) {
+                cactusRect2 = {
+                    left: cactusX2 + 20 + (cactusRandInt * 100), 
+                    top: CANVAS_HEIGHT - 68,
+                    right: cactusX2 + 50  + (cactusRandInt * 100), 
+                    bottom: CANVAS_HEIGHT - 20
+                };
+            } else if (dblCactRand == 2) {
+                cactusRect2 = {
+                    left: cactusX2 + 20 + (cactusRandInt * 100), 
+                    top: CANVAS_HEIGHT - 65,
+                    right: cactusX2 + 50  + (cactusRandInt * 100), 
+                    bottom: CANVAS_HEIGHT - 10
+                };
+            }
+        } 
+        else {
+            cactusRect = {
+                left: cactusX + 20, 
+                top: CANVAS_HEIGHT - 65,
+                right: cactusX + 50, 
+                bottom: CANVAS_HEIGHT - 10
+            };
+            if (dblCactRand == 1) {
+                cactusRect2 = {
+                    left: cactusX2 + 20 + (cactusRandInt * 100), 
+                    top: CANVAS_HEIGHT - 68,
+                    right: cactusX2 + 50  + (cactusRandInt * 100), 
+                    bottom: CANVAS_HEIGHT - 20
+                };
+            } else if (dblCactRand == 2) {
+                cactusRect2 = {
+                    left: cactusX2 + 23 + (cactusRandInt * 100), 
+                    top: CANVAS_HEIGHT - 57,
+                    right: cactusX2 + 60  + (cactusRandInt * 100), 
+                    bottom: CANVAS_HEIGHT - 10
+                };
+            } else {
+                cactusRect2 = {
+                    left: cactusX2 + 20 + (cactusRandInt * 100), 
+                    top: CANVAS_HEIGHT - 68,
+                    right: cactusX2 + 50  + (cactusRandInt * 100), 
+                    bottom: CANVAS_HEIGHT - 20
+                };
+                cactusRect3 = {
+                    left: cactusX3 + 23 + (cactusRandInt2 * 100), 
+                    top: CANVAS_HEIGHT - 57,
+                    right: cactusX3 + 60  + (cactusRandInt2 * 100), 
+                    bottom: CANVAS_HEIGHT - 10
+                };
+                };
+            }
+    } else {
+    if (cactusRandIndex == 0) {
+        cactusRect = {
+            left: cactusX + 50, 
+            top: CANVAS_HEIGHT - 158,
+            right: cactusX + 110, 
+            bottom: CANVAS_HEIGHT - 60
+        };
+        if (dblCactRand == 1) {
+            cactusRect2 = {
+                left: cactusX2 + 35 + (cactusRandInt * 100), 
+                top: CANVAS_HEIGHT - 157,
+                right: cactusX2 + 90  + (cactusRandInt * 100), 
+                bottom: CANVAS_HEIGHT - 60
+            };
+        } else if (dblCactRand == 2) {
+            cactusRect2 = {
+                left: cactusX2 + 40 + (cactusRandInt * 100), 
+                top: CANVAS_HEIGHT - 155,
+                right: cactusX2 + 90  + (cactusRandInt * 100), 
+                bottom: CANVAS_HEIGHT - 60
+            };
+        } else {
+            cactusRect2 = {
+                left: cactusX2 + 40 + (cactusRandInt * 100), 
+                top: CANVAS_HEIGHT - 155,
+                right: cactusX2 + 90  + (cactusRandInt * 100), 
+                bottom: CANVAS_HEIGHT - 60
+            };
+            cactusRect3 = {
+                left: cactusX3 + 35 + (cactusRandInt2 * 100), 
+                top: CANVAS_HEIGHT - 157,
+                right: cactusX3 + 90  + (cactusRandInt2 * 100), 
+                bottom: CANVAS_HEIGHT - 80
+            };
+        }
+    } 
+    else if (cactusRandIndex == 1) {
+        cactusRect = {
+            left: cactusX + 35, 
+            top: CANVAS_HEIGHT - 157,
+            right: cactusX + 90, 
+            bottom: CANVAS_HEIGHT - 60
+        };
+        if (dblCactRand == 1) {
+            cactusRect2 = {
+                left: cactusX2 + 50 + (cactusRandInt * 100), 
+                top: CANVAS_HEIGHT - 158,
+                right: cactusX2 + 90  + (cactusRandInt * 100), 
+                bottom: CANVAS_HEIGHT - 60
+            };
+        } else if (dblCactRand == 2) {
+            cactusRect2 = {
+                left: cactusX2 + 40 + (cactusRandInt * 100), 
+                top: CANVAS_HEIGHT - 155,
+                right: cactusX2 + 90  + (cactusRandInt * 100), 
+                bottom: CANVAS_HEIGHT - 60
+            };
+        }
+    } 
+    else {
+        cactusRect = {
+            left: cactusX + 40, 
+            top: CANVAS_HEIGHT - 155,
+            right: cactusX + 90, 
+            bottom: CANVAS_HEIGHT - 60
+        };
+        if (dblCactRand == 1) {
+            cactusRect2 = {
+                left: cactusX2 + 50 + (cactusRandInt * 100), 
+                top: CANVAS_HEIGHT - 158,
+                right: cactusX2 + 90  + (cactusRandInt * 100), 
+                bottom: CANVAS_HEIGHT - 60
+            };
+        } else if (dblCactRand == 2) {
+            cactusRect2 = {
+                left: cactusX2 + 35 + (cactusRandInt * 100), 
+                top: CANVAS_HEIGHT - 157,
+                right: cactusX2 + 90  + (cactusRandInt * 100), 
+                bottom: CANVAS_HEIGHT - 60
+            };
+        } else {
+            cactusRect2 = {
+                left: cactusX2 + 50 + (cactusRandInt * 100), 
+                top: CANVAS_HEIGHT - 158,
+                right: cactusX2 + 90  + (cactusRandInt * 100), 
+                bottom: CANVAS_HEIGHT - 60
+            };
+            cactusRect3 = {
+                left: cactusX3 + 35 + (cactusRandInt2 * 100), 
+                top: CANVAS_HEIGHT - 157,
+                right: cactusX3 + 90  + (cactusRandInt2 * 100), 
+                bottom: CANVAS_HEIGHT - 80
+            };
+            };
+        }
+    }
+    
      // uncomment this to see hitbox
     ctx.strokeStyle = "red";
     ctx.lineWidth = 2;
     ctx.strokeRect(dinoRect.left, dinoRect.top, dinoRect.right - dinoRect.left, dinoRect.bottom - dinoRect.top);
     ctx.strokeStyle = "blue";
     ctx.strokeRect(cactusRect.left, cactusRect.top, cactusRect.right - cactusRect.left, cactusRect.bottom - cactusRect.top);
-    ctx.strokeStyle = "blue";
+    ctx.strokeStyle = "green";
     ctx.strokeRect(cactusRect2.left, cactusRect2.top, cactusRect2.right - cactusRect2.left, cactusRect2.bottom - cactusRect2.top);
-    */
+    ctx.strokeStyle = "yellow";
+    ctx.strokeRect(cactusRect3.left, cactusRect3.top, cactusRect3.right - cactusRect3.left, cactusRect3.bottom - cactusRect3.top);
     
+
     if (!(dinoRect.right < cactusRect.left ||
         dinoRect.left > cactusRect.right ||
         dinoRect.bottom < cactusRect.top ||
@@ -136,7 +393,13 @@ function collisionDetection() {
         dinoRect.bottom < cactusRect2.top ||
         dinoRect.top > cactusRect2.bottom)) {
         gameOverActions();
+    } else if (!(dinoRect.right < cactusRect3.left ||
+        dinoRect.left > cactusRect3.right ||
+        dinoRect.bottom < cactusRect3.top ||
+        dinoRect.top > cactusRect3.bottom)) {
+        gameOverActions();
     }
+
 }
 
 const restBtn = document.getElementById('restartBtn');
@@ -146,7 +409,6 @@ function gameOverActions() {
     gameStart = false;
     dinoRunning = false;
     diedSound.play();
-    dinoDiedAnimation();
     dinoDiedAnimation();
     gameOverTxt.style.visibility = 'visible';
     restBtn.style.visibility = 'visible';
@@ -215,10 +477,16 @@ function restart() {
 let rand = Math.floor(Math.random() * 3) + 1;
 
 setInterval(()=> {
+    if (window.matchMedia("(min-width: 320px) and (max-width: 900px").matches) {
+        if (gameStart == false && collided == false) {
+        ctx.drawImage(bgLayer1, x1, CANVAS_HEIGHT - 20);
+        dinoCtx.drawImage(dino, 0, 0, dinoWidth, dinoHeight,0, 0, dinoWidth, dinoHeight);
+        }
+    } else {
     if (gameStart == false && collided == false) {
         ctx.drawImage(bgLayer1, x1, CANVAS_HEIGHT - 360);
         dinoCtx.drawImage(dino, 0, 0, dinoWidth, dinoHeight,0, 0, dinoWidth, dinoHeight);
-    }
+    }}
 },10);
 canvas.addEventListener('click', ()=> {
     if (gameStart == false && collided == false) {
@@ -228,11 +496,6 @@ canvas.addEventListener('click', ()=> {
         dinoRunning = true;
         animateBg();
         dinoJump(); 
-        // setInterval(()=> {
-        //     if (gameStart == true && collided == false) {
-        //         collisionDetection();
-        //     }
-        // }, 100)
         setInterval(scoreUpdate, 100);
         setInterval(()=> {
             gameSpeed++;
@@ -240,6 +503,7 @@ canvas.addEventListener('click', ()=> {
     }
     else if (collided == false) {dinoJump();}
 });
+let spacePressed = false;
 document.addEventListener('keydown', function(e) {
     if (e.code === 'Space') {
         if (gameStart == false && collided == false) {
@@ -249,19 +513,30 @@ document.addEventListener('keydown', function(e) {
             dinoRunning = true;
             animateBg();
             dinoJump(); 
-            // setInterval(()=> {
-            //     if (gameStart == true && collided == false) {
-            //         collisionDetection();
-            //     }
-            // }, 100)
             setInterval(scoreUpdate, 100);
             setInterval(()=> {
                 gameSpeed++;
             },10000);
         }
-        else if (collided == false) {dinoJump();}
+        else if (collided == false && spacePressed == false) {
+            dinoJump();
+            spacePressed = true
+        }
     }
 });
+document.addEventListener('keyup', (e)=> {
+    if (e.code === 'Space') {
+        spacePressed = false;
+    }
+})
+document.addEventListener('keydown', (e)=> {
+    if(e.keyCode === 40) {
+        if (collided == false && gameStart == true) {
+            dinoCrouch();
+        }
+    }
+})
+
 restBtn.addEventListener('click', restart);
 document.addEventListener('keydown', (e)=> {
     if (e.code === 'Space') {
@@ -294,11 +569,3 @@ document.addEventListener('visibilitychange', ()=> {
         }
     }
 })
-if (window.matchMedia("(max-width: 1000px)").matches) {
-    dinoWidth = 100;
-    dinoHeight = 100;
-    DINO_WIDTH = 100;
-    DINO_HEIGHT = 100;
-} else {
-    console.log("other screen detected");
-}
