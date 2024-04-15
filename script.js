@@ -6,7 +6,7 @@ let CANVAS_WIDTH = canvas.width = w;
 let CANVAS_HEIGHT = canvas.height = h;
 let gameSpeed = 20;
 if (window.matchMedia("(min-width: 320px) and (max-width: 900px").matches)  {
-    gameSpeed = 8
+    gameSpeed = 7
 }
 let gameStart = false;
 let collided = false;
@@ -518,7 +518,15 @@ document.addEventListener('keydown', function(e) {
             dinoJump(); 
             setInterval(scoreUpdate, 100);
             setInterval(()=> {
-                gameSpeed++;
+                if (window.matchMedia("(min-width: 320px) and (max-width: 900px").matches) {
+                    if (gameSpeed <= 10) {
+                        gameSpeed++;
+                    }
+                } else {
+                    if (gameSpeed <= 27) {
+                        gameSpeed++;
+                    }
+                }
             },10000);
         }
         else if (collided == false && spacePressed == false) {
