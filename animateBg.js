@@ -12,13 +12,13 @@ function animateBg() {
         if (x2 < -2500) {
             x2 = CANVAS_WIDTH;
         } else {
-            x2 -= (gameSpeed - 10);
+            x2 -= gameSpeed;
         }
         ctx.drawImage(bgLayer1, x1, CANVAS_HEIGHT - 20)
         if (x1 < -(1300 - CANVAS_WIDTH)) {
             x1 = 0;
         } else {
-            x1-= (gameSpeed - 10);
+            x1-= gameSpeed;
         }
         if (isNight == true) {
             ctx.drawImage(moon, x7, CANVAS_HEIGHT - CANVAS_HEIGHT, 150, 150);
@@ -26,7 +26,7 @@ function animateBg() {
             x7 = CANVAS_WIDTH + (moonDist * 90);
             moonDist = Math.floor(Math.random() * 5);
         } else {
-            x7 -= (gameSpeed - 10);
+            x7 -= gameSpeed;
         }
         }
         ctx.drawImage(cloud1, x3, cloudHeight1 * 5);
@@ -34,28 +34,28 @@ function animateBg() {
             x3 = CANVAS_WIDTH;
             cloudHeight1 = Math.floor(Math.random() * 10);
         } else {
-            x3 -= (gameSpeed - 10);
+            x3 -= gameSpeed;
         }
         ctx.drawImage(cloud2, x4, cloudHeight2 * 5);
         if (x4 < -2000) {
             x4 = CANVAS_WIDTH + (cloudHeight2 * 50);
             cloudHeight2 = Math.floor(Math.random() * 10);
         } else {
-            x4 -= (gameSpeed - 10);
+            x4 -= gameSpeed;
         }
         ctx.drawImage(cloud3, x5, cloudHeight3 * 5);
         if (x5 < -2000) {
             x5 = CANVAS_WIDTH + (cloudHeight3 * 70);
             cloudHeight3 = Math.floor(Math.random() * 10);
         } else {
-            x5 -= (gameSpeed - 10);
+            x5 -= gameSpeed;
         }
         ctx.drawImage(cloud4, x6, cloudHeight4 * 5);
         if (x6 < -2000) {
             x6 = CANVAS_WIDTH + (cloudHeight4 * 90);
             cloudHeight4 = Math.floor(Math.random() * 10);
         } else {
-            x6 -= (gameSpeed - 10);
+            x6 -= gameSpeed;
         }
     } else {
         ctx.drawImage(pyramid, x2, CANVAS_HEIGHT - 330);
@@ -116,7 +116,7 @@ function animateBg() {
                 cactusX = CANVAS_WIDTH;
             }
             else {
-                cactusX -= (gameSpeed - 10);
+                cactusX -= gameSpeed;
             }
             if (dblCactRand == 1) {
                 ctx.drawImage(cactus2, 0, 0, 203, 158, cactusX2 + (cactusRandInt * 100), CANVAS_HEIGHT - 70, 115, 90);
@@ -125,7 +125,7 @@ function animateBg() {
                     dblCactRand = Math.round(Math.random() * 3) + 1;
                     cactusRandIndex = Math.floor(Math.random() * 3)
                 } else {
-                    cactusX2 -= (gameSpeed - 10);
+                    cactusX2 -= gameSpeed;
                 }
             } else if (dblCactRand == 2) {
                 ctx.drawImage(cactus3, 0, 0, 176, 170, cactusX2 + (cactusRandInt * 100), CANVAS_HEIGHT - 70, 110, 110);
@@ -134,14 +134,14 @@ function animateBg() {
                     dblCactRand = Math.round(Math.random() * 3) + 1;
                     cactusRandIndex = Math.floor(Math.random() * 3)
                 } else {
-                    cactusX2 -= (gameSpeed - 10);
+                    cactusX2 -= gameSpeed;
                 }
             } else {
                 ctx.drawImage(cactus3, 0, 0, 176, 170, cactusX2 + (cactusRandInt * 100), CANVAS_HEIGHT - 70, 110, 110);
                 if (cactusX2 < -(cactDeadEnd + CANVAS_WIDTH)) {
                     cactusX2 = CANVAS_WIDTH;
                 } else {
-                    cactusX2 -= (gameSpeed - 10);
+                    cactusX2 -= gameSpeed;
                 }
                 ctx.drawImage(cactus2, 0, 0, 203, 158, cactusX3 + (cactusRandInt2 * 100), CANVAS_HEIGHT - 70, 115, 90);
                 if (cactusX3 < -(cactDeadEnd + CANVAS_WIDTH)) {
@@ -149,7 +149,7 @@ function animateBg() {
                     dblCactRand = Math.round(Math.random() * 3) + 1;
                     cactusRandIndex = Math.floor(Math.random() * 3)
                 } else {
-                    cactusX3 -= (gameSpeed - 10);
+                    cactusX3 -= gameSpeed;
                 }
             }
         } else {
@@ -203,7 +203,7 @@ function animateBg() {
             cactusX = CANVAS_WIDTH;
         } 
         else {
-            cactusX -= (gameSpeed - 10);
+            cactusX -= gameSpeed;
         }
         if (dblCactRand == 1) {
             ctx.drawImage(cactus1, 0, 0, 146, 173, cactusX2 + (cactusRandInt * 100), CANVAS_HEIGHT - 70, 90, 100);
@@ -212,7 +212,7 @@ function animateBg() {
                 dblCactRand = Math.round(Math.random() * 3) + 1;
                 cactusRandIndex = Math.floor(Math.random() * 3)
             } else {
-                cactusX2 -= (gameSpeed - 10);
+                cactusX2 -= gameSpeed;
             }
         } else if (dblCactRand == 2) {
             ctx.drawImage(cactus3, 0, 0, 176, 170, cactusX2 + (cactusRandInt * 100), CANVAS_HEIGHT - 60, 110, 110);
@@ -221,7 +221,7 @@ function animateBg() {
                 dblCactRand = Math.round(Math.random() * 3) + 1;
                 cactusRandIndex = Math.floor(Math.random() * 3)
             } else {
-                cactusX2 -= (gameSpeed - 10);
+                cactusX2 -= gameSpeed;
             }
         } else {
             dblCactRand = Math.round(Math.random() * 3) + 1;
@@ -266,7 +266,7 @@ function animateBg() {
                 cactusX = CANVAS_WIDTH;
             } 
             else {
-                cactusX -= (gameSpeed - 10);
+                cactusX -= gameSpeed;
             }
             if (dblCactRand == 1) {
             ctx.drawImage(cactus1, 0, 0, 146, 173, cactusX2 + (cactusRandInt * 100), CANVAS_HEIGHT - 70, 90, 100);
@@ -275,7 +275,7 @@ function animateBg() {
                 dblCactRand = Math.round(Math.random() * 3) + 1;
                 cactusRandIndex = Math.floor(Math.random() * 3)
             } else {
-                cactusX2 -= (gameSpeed - 10);
+                cactusX2 -= gameSpeed;
             }
         } else if (dblCactRand == 2) {
             ctx.drawImage(cactus2, 0, 0, 203, 158, cactusX2 + (cactusRandInt * 100), CANVAS_HEIGHT - 60, 115, 90);
@@ -284,14 +284,14 @@ function animateBg() {
                 dblCactRand = Math.round(Math.random() * 3) + 1;
                 cactusRandIndex = Math.floor(Math.random() * 3)
             } else {
-                cactusX2 -= (gameSpeed - 10);
+                cactusX2 -= gameSpeed;
             }
         } else {
             ctx.drawImage(cactus1, 0, 0, 146, 173, cactusX2 + (cactusRandInt * 100), CANVAS_HEIGHT - 70, 90, 100);
             if (cactusX2 < -(cactDeadEnd + CANVAS_WIDTH)) {
                 cactusX2 = CANVAS_WIDTH;
             } else {
-                cactusX2 -= (gameSpeed - 10);
+                cactusX2 -= gameSpeed;
             }
             ctx.drawImage(cactus2, 0, 0, 203, 158, cactusX3 + (cactusRandInt2 * 100), CANVAS_HEIGHT - 60, 115, 90);
             if (cactusX3 < -(cactDeadEnd + CANVAS_WIDTH)) {
@@ -299,7 +299,7 @@ function animateBg() {
                 dblCactRand = Math.round(Math.random() * 3) + 1;
                 cactusRandIndex = Math.floor(Math.random() * 3)
             } else {
-                cactusX3 -= (gameSpeed - 10);
+                cactusX3 -= gameSpeed;
             }
         }
     } else {

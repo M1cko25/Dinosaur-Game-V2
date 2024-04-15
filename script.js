@@ -5,6 +5,9 @@ let h = canvas.getBoundingClientRect().height;
 let CANVAS_WIDTH = canvas.width = w;
 let CANVAS_HEIGHT = canvas.height = h;
 let gameSpeed = 20;
+if (window.matchMedia("(min-width: 320px) and (max-width: 900px").matches)  {
+    gameSpeed = 7
+}
 let gameStart = false;
 let collided = false;
 let currScore = 0;
