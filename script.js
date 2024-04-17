@@ -127,6 +127,9 @@ let dinoJumping = false;
 let dinoRunning = false;
 let dinoCrouching = false;
 let jumpDuration = 800;
+if (window.matchMedia("(min-width: 320px) and (max-width: 700px").matches) {
+    jumpDuration = 700
+}
 
 function collisionDetection() {
     let dinoRect = {
@@ -541,6 +544,7 @@ canvas.addEventListener('click', ()=> {
                 if (gameSpeed <= 10) {
                     gameSpeed++;
                     jumpDuration -= 25
+
                 }
             } else {
                 if (gameSpeed <= 27) {
