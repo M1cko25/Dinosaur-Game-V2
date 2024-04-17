@@ -21,6 +21,7 @@ border: 0px solid;
 background-color: skyblue;
 transition: background-color 2s linear;
 cursor: pointer;
+overflow: hidden;
 }
 #canvas1 {
     position: absolute;
@@ -35,12 +36,24 @@ cursor: pointer;
     bottom: 55px;
     left: 55px; 
 }
+#canvas3 {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    bottom: 100px;
+}
+#canvas4 {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    bottom: 190px;
+}
 #restartBtn {
     position: absolute;
     top: 50%;
     left: 50%;
     width: 1200px;
-    height: 70%;
+    height: 505px;
     transform: translate(-50%, -50%);
     background-image: url("./images/rstrt\ btn.png");
     background-position: center;
@@ -49,6 +62,7 @@ cursor: pointer;
     background-color: gray;
     border: none;
     cursor: pointer;
+    outline: none;
     opacity: 0.5;
     z-index: 10;
     visibility: hidden;
@@ -109,6 +123,7 @@ cursor: pointer;
         right: 100%;
     }
 }
+
 @media (min-width: 320px) and (max-width: 900px) {
 .container {
     width: 400px;
@@ -123,6 +138,18 @@ cursor: pointer;
 #canvas2 {
     width: 50px;
     height: 50px;
+    bottom: 14px;
+    left: 10px;
+}
+#canvas3 {
+    width: 50px;
+    height: 50px;
+    bottom: 30px;
+}
+#canvas4 {
+    width: 50px;
+    height: 50px;
+    bottom: 90px;
 }
 #score, #hiScore {
     font-size: 15px;
@@ -130,13 +157,10 @@ cursor: pointer;
 #gameOver {
     font-size: 20px;
 }
-#canvas2 {
-    bottom: 14px;
-    left: 10px;
-}
+
 @keyframes jumping {
     0%, 100% {
-        bottom: 20px;
+        bottom: 14px;
     }
     50% {
         bottom: 120px;

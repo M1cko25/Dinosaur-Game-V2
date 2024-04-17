@@ -1,7 +1,7 @@
 
 function dinoJumpAnimation() {
     playerState = 'jump';
-    staggerFrames = 3;
+    staggerFrames = 7;
     dinoCtx.clearRect(0, 0, DINO_WIDTH, DINO_HEIGHT);
     let position = Math.floor(gameFrame/staggerFrames) % spriteAnimations[playerState].loc.length;
     frameX = dinoWidth * position;
@@ -21,10 +21,8 @@ function dinoRunAnimation() {
     playerState = 'run';
     if (currScore < 500) {
         staggerFrames = 2;
-    } else if (currScore >= 500 && currScore < 2000) {
-        staggerFrames = 1;
     } else {
-        staggerFrames = 0.7;
+        staggerFrames = 1;
     }
     dinoCtx.clearRect(0, 0, DINO_WIDTH, DINO_HEIGHT);
     let position = Math.floor(gameFrame/staggerFrames) % spriteAnimations[playerState].loc.length;
@@ -54,7 +52,7 @@ function dinoJump() {
         if (collided == false) {
         dinoCanvas.classList.remove('jump');
         dinoRunAnimation();
-        }}, 800)
+        }}, jumpDuration)
     }
 }
 
@@ -107,4 +105,20 @@ function dinoCrouch() {
         }}, 800)
     }
 }
-
+let birdframeX = 0;
+let birdStaggerFrames = 3;
+function birdAnimation() {
+    birdCtx.clearRect(0, 0, BIRD_WIDTH, BIRD_HEIGHT);
+    birdCtx2.clearRect(0, 0, BIRD_WIDTH2, BIRD_HEIGHT2);
+   birdCtx.drawImage(bird, birdframeX * birdWidth, 0, birdWidth, birdHeight, 0, 0, birdWidth, birdHeight);
+   birdCtx2.drawImage(bird, birdframeX * birdWidth, 0, birdWidth, birdHeight, 0, 0, birdWidth, birdHeight);
+   if (gameFrame % birdStaggerFrames == 0) {
+    if (birdframeX < 8){
+        birdframeX++;
+    } else {
+        birdframeX = 0;
+    }
+   }
+   gameFrame++;
+   requestAnimationFrame(birdAnimation);
+}

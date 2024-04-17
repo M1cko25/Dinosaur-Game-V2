@@ -1,11 +1,11 @@
 const canvas = document.querySelector('#canvas1');
 const ctx = canvas.getContext('2d');
-let w = canvas.getBoundingClientRect().width;
-let h = canvas.getBoundingClientRect().height;
-let CANVAS_WIDTH = canvas.width = w;
-let CANVAS_HEIGHT = canvas.height = h;
+let CANVAS_WIDTH = canvas.width = 1200;
+let CANVAS_HEIGHT = canvas.height = 505;
 let gameSpeed = 20;
 if (window.matchMedia("(min-width: 320px) and (max-width: 900px").matches)  {
+    CANVAS_WIDTH = canvas.width = 400;
+    CANVAS_HEIGHT = canvas.height = 170;
     gameSpeed = 7
 }
 let gameStart = false;
@@ -22,6 +22,18 @@ let dinoHeight = 100;
 let gameFrame = 0;
 let staggerFrames;
 let playerState = 'idle';
+
+const birdCanvas = document.getElementById('canvas3'); 
+const birdCanvas2 = document.getElementById('canvas4'); 
+const birdCtx = birdCanvas.getContext('2d');
+const birdCtx2 = birdCanvas2.getContext('2d');
+let BIRD_WIDTH = birdCanvas.width = 100;
+let BIRD_WIDTH2 = birdCanvas2.width = 100;
+let BIRD_HEIGHT = birdCanvas.height = 100
+let BIRD_HEIGHT2 = birdCanvas2.height = 100
+let birdWidth = 100;
+let birdHeight = 100;
+let isBirdActive = false;
 
 const bgLayer1 = new Image();
 const pyramid = new Image();
@@ -56,27 +68,27 @@ cactus1.src = './images/Cactus1.png';
 cactus2.src = './images/Cactus2.png';
 cactus3.src = './images/Cactus3.png';
 }
+
 const dino = new Image();
 dino.src = './images/DinoSprite1.png';
+const bird = new Image();
+bird.src = './images/birdSprite.png';
+birdCanvas.style.left = CANVAS_WIDTH + "px";
+birdCanvas2.style.left = CANVAS_WIDTH + "px";
 
-let cactusX = CANVAS_WIDTH + 3000;
-let cactusX2 = CANVAS_WIDTH + 3000;
-let cactusX3 = CANVAS_WIDTH + 3000;
-let cactusRandInt = Math.floor(Math.random() * 2) + 8;
-let cactusRandInt2 = Math.floor(Math.random() * 2) + 18;
+let cactusX = CANVAS_WIDTH;
+let cactusX2 = CANVAS_WIDTH;
+let cactusX3 = CANVAS_WIDTH;
+let cactusX4 = CANVAS_WIDTH;
+let cactusRandInt = Math.floor(Math.random() * 4) + 2;
+
 if (window.matchMedia("(min-width: 320px) and (max-width: 900px").matches) {
-    cactusX = CANVAS_WIDTH + 1000;
-    cactusX2 = CANVAS_WIDTH + 1000;
-    cactusX3 = CANVAS_WIDTH + 1000;
-    cactusRandInt = Math.floor(Math.random() * 2) + 6;
-    cactusRandInt2 = Math.floor(Math.random() * 2) + 16;
+    cactusRandInt = Math.floor(Math.random() * 5) + 6;
 }
-
-
-let cactusRandIndex = Math.floor(Math.random() * 3) ;
-let dblCactRand = Math.round(Math.random() * 2) + 1;
-
-let birdX = CANVAS_WIDTH + 400;
+let cactRandIndex = Math.floor(Math.random() * 3);
+let cactRandIndex2 = Math.floor(Math.random() * 6);
+let cactRandIndex3 = Math.floor(Math.random() * 3);
+let cactRandIndex4 = Math.floor(Math.random() * 6);
 
 let cloudHeight1 = Math.floor(Math.random() * 10);
 let cloudHeight2 = Math.floor(Math.random() * 10);
@@ -114,13 +126,7 @@ animationState.forEach((state, index) => {
 let dinoJumping = false;
 let dinoRunning = false;
 let dinoCrouching = false;
-
-window.addEventListener('resize', ()=> {
-    w = canvas.getBoundingClientRect().width;
-    h = canvas.getBoundingClientRect().height;
-    CANVAS_WIDTH = canvas.width = w;
-    CANVAS_HEIGHT = canvas.height = h;
-})
+let jumpDuration = 800;
 
 function collisionDetection() {
     let dinoRect = {
@@ -179,196 +185,217 @@ function collisionDetection() {
         right: 0, 
         bottom: 0
     };
+    let cactusRect4 = {
+        left: 0, 
+        top: 0,
+        right: 0, 
+        bottom: 0
+    };
+    
     if (window.matchMedia("(min-width: 320px) and (max-width: 900px").matches) {
-        if (cactusRandIndex == 0) {
+        if (cactRandIndex == 0) {
             cactusRect = {
                 left: cactusX + 20, 
                 top: CANVAS_HEIGHT - 58,
                 right: cactusX + 50, 
                 bottom: CANVAS_HEIGHT - 10
             };
-            if (dblCactRand == 1) {
-                cactusRect2 = {
-                    left: cactusX2 + 23 + (cactusRandInt * 100), 
-                    top: CANVAS_HEIGHT - 67,
-                    right: cactusX2 + 60  + (cactusRandInt * 100), 
-                    bottom: CANVAS_HEIGHT - 10
-                };
-            } else if (dblCactRand == 2) {
-                cactusRect2 = {
-                    left: cactusX2 + 20 + (cactusRandInt * 100), 
-                    top: CANVAS_HEIGHT - 65,
-                    right: cactusX2 + 50  + (cactusRandInt * 100), 
-                    bottom: CANVAS_HEIGHT - 10
-                };
-            } else {
-                cactusRect2 = {
-                    left: cactusX2 + 20 + (cactusRandInt * 100), 
-                    top: CANVAS_HEIGHT - 65,
-                    right: cactusX2 + 50  + (cactusRandInt * 100), 
-                    bottom: CANVAS_HEIGHT - 10
-                };
-                cactusRect3 = {
-                    left: cactusX3 + 23 + (cactusRandInt2 * 100), 
-                    top: CANVAS_HEIGHT - 67,
-                    right: cactusX3 + 60  + (cactusRandInt2 * 100), 
-                    bottom: CANVAS_HEIGHT - 10
-                };
-            }
-        } 
-        else if (cactusRandIndex == 1) {
+        } else if (cactRandIndex == 1) {
             cactusRect = {
                 left: cactusX + 23, 
                 top: CANVAS_HEIGHT - 57,
                 right: cactusX + 60, 
                 bottom: CANVAS_HEIGHT - 10
             };
-            if (dblCactRand == 1) {
-                cactusRect2 = {
-                    left: cactusX2 + 20 + (cactusRandInt * 100), 
-                    top: CANVAS_HEIGHT - 68,
-                    right: cactusX2 + 50  + (cactusRandInt * 100), 
-                    bottom: CANVAS_HEIGHT - 20
-                };
-            } else if (dblCactRand == 2) {
-                cactusRect2 = {
-                    left: cactusX2 + 20 + (cactusRandInt * 100), 
-                    top: CANVAS_HEIGHT - 65,
-                    right: cactusX2 + 50  + (cactusRandInt * 100), 
-                    bottom: CANVAS_HEIGHT - 10
-                };
-            }
-        } 
-        else {
+        } else {
             cactusRect = {
                 left: cactusX + 20, 
                 top: CANVAS_HEIGHT - 65,
                 right: cactusX + 50, 
                 bottom: CANVAS_HEIGHT - 10
             };
-            if (dblCactRand == 1) {
-                cactusRect2 = {
-                    left: cactusX2 + 20 + (cactusRandInt * 100), 
-                    top: CANVAS_HEIGHT - 68,
-                    right: cactusX2 + 50  + (cactusRandInt * 100), 
-                    bottom: CANVAS_HEIGHT - 20
-                };
-            } else if (dblCactRand == 2) {
-                cactusRect2 = {
-                    left: cactusX2 + 23 + (cactusRandInt * 100), 
-                    top: CANVAS_HEIGHT - 57,
-                    right: cactusX2 + 60  + (cactusRandInt * 100), 
-                    bottom: CANVAS_HEIGHT - 10
-                };
-            } else {
-                cactusRect2 = {
-                    left: cactusX2 + 20 + (cactusRandInt * 100), 
-                    top: CANVAS_HEIGHT - 68,
-                    right: cactusX2 + 50  + (cactusRandInt * 100), 
-                    bottom: CANVAS_HEIGHT - 20
-                };
-                cactusRect3 = {
-                    left: cactusX3 + 23 + (cactusRandInt2 * 100), 
-                    top: CANVAS_HEIGHT - 57,
-                    right: cactusX3 + 60  + (cactusRandInt2 * 100), 
-                    bottom: CANVAS_HEIGHT - 10
-                };
-                };
-            }
+        }
+        if (cactRandIndex2 == 0) {
+            cactusRect2 = {
+                left: cactusX2 + 20, 
+                top: CANVAS_HEIGHT - 58,
+                right: cactusX2 + 50, 
+                bottom: CANVAS_HEIGHT - 10
+            };
+        } else if (cactRandIndex2 == 1) {
+            cactusRect2 = {
+                left: cactusX2 + 23, 
+                top: CANVAS_HEIGHT - 57,
+                right: cactusX2 + 60, 
+                bottom: CANVAS_HEIGHT - 10
+            };
+        } else if (cactRandIndex2 == 2 || cactRandIndex2 == 3) {
+            cactusRect2 = {
+                left: cactusX2 + 20, 
+                top: CANVAS_HEIGHT - 65,
+                right: cactusX2 + 50, 
+                bottom: CANVAS_HEIGHT - 10
+            };
+        } else {
+            cactusRect2 = {
+                left: cactusX2 + 20, 
+                top: CANVAS_HEIGHT - 125,
+                right: cactusX2 + 50, 
+                bottom: CANVAS_HEIGHT - 115
+            };
+        }
+        if (cactRandIndex3 == 0) {
+            cactusRect3 = {
+                left: cactusX3 + 20, 
+                top: CANVAS_HEIGHT - 58,
+                right: cactusX3 + 50, 
+                bottom: CANVAS_HEIGHT - 10
+            };
+        } else if (cactRandIndex3 == 1) {
+            cactusRect3 = {
+                left: cactusX3 + 23, 
+                top: CANVAS_HEIGHT - 57,
+                right: cactusX3 + 60, 
+                bottom: CANVAS_HEIGHT - 10
+            };
+        } else {
+            cactusRect3 = {
+                left: cactusX3 + 20, 
+                top: CANVAS_HEIGHT - 65,
+                right: cactusX3 + 50, 
+                bottom: CANVAS_HEIGHT - 10
+            };
+        }
+        if (cactRandIndex4 == 0) {
+            cactusRect4 = {
+                left: cactusX4 + 20, 
+                top: CANVAS_HEIGHT - 58,
+                right: cactusX4 + 50, 
+                bottom: CANVAS_HEIGHT - 10
+            };
+        } else if (cactRandIndex4 == 1) {
+            cactusRect4 = {
+                left: cactusX4 + 23, 
+                top: CANVAS_HEIGHT - 57,
+                right: cactusX4 + 60, 
+                bottom: CANVAS_HEIGHT - 10
+            };
+        } else if (cactRandIndex4 == 2 || cactRandIndex4 == 3) {
+            cactusRect4 = {
+                left: cactusX4 + 20, 
+                top: CANVAS_HEIGHT - 65,
+                right: cactusX4 + 50, 
+                bottom: CANVAS_HEIGHT - 10
+            };
+        } else {
+            cactusRect4 = {
+                left: cactusX4 + 20, 
+                top: CANVAS_HEIGHT - 65,
+                right: cactusX4 + 60, 
+                bottom: CANVAS_HEIGHT - 55
+            };
+        }
     } else {
-    if (cactusRandIndex == 0) {
-        cactusRect = {
-            left: cactusX + 50, 
-            top: CANVAS_HEIGHT - 158,
-            right: cactusX + 110, 
-            bottom: CANVAS_HEIGHT - 60
-        };
-        if (dblCactRand == 1) {
-            cactusRect2 = {
-                left: cactusX2 + 35 + (cactusRandInt * 100), 
-                top: CANVAS_HEIGHT - 157,
-                right: cactusX2 + 90  + (cactusRandInt * 100), 
+        if (cactRandIndex == 0) {
+            cactusRect = {
+                left: cactusX + 50, 
+                top: CANVAS_HEIGHT - 158,
+                right: cactusX + 110, 
                 bottom: CANVAS_HEIGHT - 60
             };
-        } else if (dblCactRand == 2) {
-            cactusRect2 = {
-                left: cactusX2 + 40 + (cactusRandInt * 100), 
+        } else if (cactRandIndex == 1) {
+            cactusRect = {
+                left: cactusX + 35, 
+                top: CANVAS_HEIGHT - 157,
+                right: cactusX + 90, 
+                bottom: CANVAS_HEIGHT - 60
+            };
+        } else {
+            cactusRect = {
+                left: cactusX + 40, 
                 top: CANVAS_HEIGHT - 155,
-                right: cactusX2 + 90  + (cactusRandInt * 100), 
+                right: cactusX + 90, 
+                bottom: CANVAS_HEIGHT - 60
+            };
+        }
+        if (cactRandIndex2 == 0) {
+            cactusRect2 = {
+                left: cactusX2 + 50, 
+                top: CANVAS_HEIGHT - 158,
+                right: cactusX2 + 110, 
+                bottom: CANVAS_HEIGHT - 60
+            };
+        } else if (cactRandIndex2 == 1) {
+            cactusRect2 = {
+                left: cactusX2 + 35, 
+                top: CANVAS_HEIGHT - 157,
+                right: cactusX2 + 90, 
+                bottom: CANVAS_HEIGHT - 60
+            };
+        } else if (cactRandIndex2 == 2 || cactRandIndex2 == 3){
+            cactusRect2 = {
+                left: cactusX2 + 40, 
+                top: CANVAS_HEIGHT - 155,
+                right: cactusX2 + 90, 
                 bottom: CANVAS_HEIGHT - 60
             };
         } else {
             cactusRect2 = {
-                left: cactusX2 + 40 + (cactusRandInt * 100), 
-                top: CANVAS_HEIGHT - 155,
-                right: cactusX2 + 90  + (cactusRandInt * 100), 
-                bottom: CANVAS_HEIGHT - 60
+                left: cactusX2 + 40, 
+                top: CANVAS_HEIGHT - 265,
+                right: cactusX2 + 90, 
+                bottom: CANVAS_HEIGHT - 240
             };
+        }
+        if (cactRandIndex3 == 0) {
             cactusRect3 = {
-                left: cactusX3 + 35 + (cactusRandInt2 * 100), 
-                top: CANVAS_HEIGHT - 157,
-                right: cactusX3 + 90  + (cactusRandInt2 * 100), 
-                bottom: CANVAS_HEIGHT - 80
-            };
-        }
-    } 
-    else if (cactusRandIndex == 1) {
-        cactusRect = {
-            left: cactusX + 35, 
-            top: CANVAS_HEIGHT - 157,
-            right: cactusX + 90, 
-            bottom: CANVAS_HEIGHT - 60
-        };
-        if (dblCactRand == 1) {
-            cactusRect2 = {
-                left: cactusX2 + 50 + (cactusRandInt * 100), 
+                left: cactusX3 + 50, 
                 top: CANVAS_HEIGHT - 158,
-                right: cactusX2 + 90  + (cactusRandInt * 100), 
+                right: cactusX3 + 110, 
                 bottom: CANVAS_HEIGHT - 60
             };
-        } else if (dblCactRand == 2) {
-            cactusRect2 = {
-                left: cactusX2 + 40 + (cactusRandInt * 100), 
-                top: CANVAS_HEIGHT - 155,
-                right: cactusX2 + 90  + (cactusRandInt * 100), 
-                bottom: CANVAS_HEIGHT - 60
-            };
-        }
-    } 
-    else {
-        cactusRect = {
-            left: cactusX + 40, 
-            top: CANVAS_HEIGHT - 155,
-            right: cactusX + 90, 
-            bottom: CANVAS_HEIGHT - 60
-        };
-        if (dblCactRand == 1) {
-            cactusRect2 = {
-                left: cactusX2 + 50 + (cactusRandInt * 100), 
-                top: CANVAS_HEIGHT - 158,
-                right: cactusX2 + 90  + (cactusRandInt * 100), 
-                bottom: CANVAS_HEIGHT - 60
-            };
-        } else if (dblCactRand == 2) {
-            cactusRect2 = {
-                left: cactusX2 + 35 + (cactusRandInt * 100), 
+        } else if (cactRandIndex3 == 1) {
+            cactusRect3 = {
+                left: cactusX3 + 35, 
                 top: CANVAS_HEIGHT - 157,
-                right: cactusX2 + 90  + (cactusRandInt * 100), 
+                right: cactusX3 + 90, 
                 bottom: CANVAS_HEIGHT - 60
             };
         } else {
-            cactusRect2 = {
-                left: cactusX2 + 50 + (cactusRandInt * 100), 
-                top: CANVAS_HEIGHT - 158,
-                right: cactusX2 + 90  + (cactusRandInt * 100), 
+            cactusRect3 = {
+                left: cactusX3 + 40, 
+                top: CANVAS_HEIGHT - 155,
+                right: cactusX3 + 90, 
                 bottom: CANVAS_HEIGHT - 60
             };
-            cactusRect3 = {
-                left: cactusX3 + 35 + (cactusRandInt2 * 100), 
-                top: CANVAS_HEIGHT - 157,
-                right: cactusX3 + 90  + (cactusRandInt2 * 100), 
-                bottom: CANVAS_HEIGHT - 80
+        }
+        if (cactRandIndex4 == 0) {
+            cactusRect4 = {
+                left: cactusX4 + 50, 
+                top: CANVAS_HEIGHT - 158,
+                right: cactusX4 + 110, 
+                bottom: CANVAS_HEIGHT - 60
             };
+        } else if (cactRandIndex4 == 1) {
+            cactusRect4 = {
+                left: cactusX4 + 35, 
+                top: CANVAS_HEIGHT - 157,
+                right: cactusX4 + 90, 
+                bottom: CANVAS_HEIGHT - 60
+            };
+        } else if (cactRandIndex4 == 2 || cactRandIndex4 == 3){
+            cactusRect4 = {
+                left: cactusX4 + 40, 
+                top: CANVAS_HEIGHT - 155,
+                right: cactusX4 + 90, 
+                bottom: CANVAS_HEIGHT - 60
+            };
+        } else {
+            cactusRect4 = {
+                left: cactusX4 + 40, 
+                top: CANVAS_HEIGHT - 155,
+                right: cactusX4 + 90, 
+                bottom: CANVAS_HEIGHT - 140
             };
         }
     }
@@ -383,8 +410,9 @@ function collisionDetection() {
     ctx.strokeRect(cactusRect2.left, cactusRect2.top, cactusRect2.right - cactusRect2.left, cactusRect2.bottom - cactusRect2.top);
     ctx.strokeStyle = "yellow";
     ctx.strokeRect(cactusRect3.left, cactusRect3.top, cactusRect3.right - cactusRect3.left, cactusRect3.bottom - cactusRect3.top);
+    ctx.strokeStyle = "pink";
+    ctx.strokeRect(cactusRect4.left, cactusRect4.top, cactusRect4.right - cactusRect4.left, cactusRect4.bottom - cactusRect4.top);
     */
-
     if (!(dinoRect.right < cactusRect.left ||
         dinoRect.left > cactusRect.right ||
         dinoRect.bottom < cactusRect.top ||
@@ -401,10 +429,14 @@ function collisionDetection() {
         dinoRect.bottom < cactusRect3.top ||
         dinoRect.top > cactusRect3.bottom)) {
         gameOverActions();
+    } else if (!(dinoRect.right < cactusRect4.left ||
+        dinoRect.left > cactusRect4.right ||
+        dinoRect.bottom < cactusRect4.top ||
+        dinoRect.top > cactusRect4.bottom)) {
+        gameOverActions();
     }
-
+    
 }
-
 const restBtn = document.getElementById('restartBtn');
 const diedSound = new Audio('./sounds/deathsound.mp3');
 function gameOverActions() {
@@ -453,6 +485,9 @@ function scoreUpdate() {
         if ((currScore % 100) == 0) {
             scoreSound.play();
         }
+        if (currScore > 350) {
+            isBirdActive = true;
+        } 
     }
 }
 
@@ -500,21 +535,25 @@ canvas.addEventListener('click', ()=> {
         animateBg();
         dinoJump(); 
         setInterval(scoreUpdate, 100);
+        birdAnimation();
         setInterval(()=> {
             if (window.matchMedia("(min-width: 320px) and (max-width: 900px").matches) {
                 if (gameSpeed <= 10) {
                     gameSpeed++;
+                    jumpDuration -= 25
                 }
             } else {
                 if (gameSpeed <= 27) {
                     gameSpeed++;
+                    jumpDuration -= 20
                 }
             }
-        },25000);
+        },25000); 
     }
     else if (collided == false) {dinoJump();}
 });
 let spacePressed = false;
+let isBirdAlreadyAnimating = false;
 document.addEventListener('keydown', function(e) {
     if (e.code === 'Space') {
         if (gameStart == false && collided == false) {
@@ -525,17 +564,20 @@ document.addEventListener('keydown', function(e) {
             animateBg();
             dinoJump(); 
             setInterval(scoreUpdate, 100);
+            birdAnimation();
             setInterval(()=> {
                 if (window.matchMedia("(min-width: 320px) and (max-width: 900px").matches) {
                     if (gameSpeed <= 10) {
                         gameSpeed++;
+                        jumpDuration -= 25
                     }
                 } else {
                     if (gameSpeed <= 27) {
                         gameSpeed++;
+                        jumpDuration -= 20
                     }
                 }
-            },25000);
+            },25000); 
         }
         else if (collided == false && spacePressed == false) {
             dinoJump();
