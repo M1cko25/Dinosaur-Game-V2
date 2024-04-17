@@ -101,7 +101,7 @@ overflow: hidden;
 }
 
 .jump {
-    animation: jumping 800ms ease-in-out forwards;
+    animation: jumping ease-in-out forwards;
 }
 .cactiMove {
     animation: cactusmove 6s linear forwards infinite;

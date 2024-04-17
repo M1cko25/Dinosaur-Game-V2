@@ -44,6 +44,7 @@ function dinoJump() {
         dinoJumping = true;
         dinoRunning = false
         dinoCanvas.classList.add('jump');
+        dinoCanvas.style.animationDuration = jumpDuration + "ms"
         dinoJumpAnimation();
         jumpSound.play();
         setTimeout(()=> {
