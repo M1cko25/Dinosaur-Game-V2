@@ -6,7 +6,7 @@ let gameSpeed = 20;
 if (window.matchMedia("(min-width: 320px) and (max-width: 900px").matches)  {
     CANVAS_WIDTH = canvas.width = 400;
     CANVAS_HEIGHT = canvas.height = 170;
-    gameSpeed = 7
+    gameSpeed = 5
 }
 let gameStart = false;
 let collided = false;
